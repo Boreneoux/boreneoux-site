@@ -25,7 +25,7 @@ function ThemeToggle() {
       className="w-8 h-8 flex items-center justify-center text-fg-muted hover:text-fg transition-colors"
       aria-label="Toggle theme"
     >
-      {resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+      {resolvedTheme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
     </button>
   );
 }
@@ -33,15 +33,23 @@ function ThemeToggle() {
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isDashboard = pathname.startsWith("/dashboard");
+  const isHome = pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      if (isHome) {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        setScrollProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
+      }
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -57,11 +65,19 @@ export function Navbar() {
             : "bg-transparent"
         )}
       >
+        {/* Scroll progress bar */}
+        {isHome && (
+          <div
+            className="absolute bottom-0 left-0 h-[1px] bg-accent transition-all duration-100"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        )}
+
         <nav className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
           {/* Brand */}
           <Link
             href="/"
-            className="font-mono text-sm font-medium text-accent hover:text-accent/80 transition-colors tracking-tight"
+            className="font-mono text-sm font-medium text-accent hover:text-accent/70 transition-colors tracking-tight"
           >
             boreneoux
           </Link>
@@ -73,11 +89,18 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-fg-muted hover:text-fg transition-colors font-medium"
+                  className="text-sm text-fg-muted hover:text-fg transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
+              <a
+                href="/Resume_2026_Ichlasul_Fikri.pdf"
+                download
+                className="text-sm text-fg-subtle hover:text-fg transition-colors font-mono"
+              >
+                résumé
+              </a>
             </div>
           )}
 
@@ -97,9 +120,9 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — full screen overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-bg/95 backdrop-blur-sm flex flex-col items-center justify-center gap-8 md:hidden">
+        <div className="fixed inset-0 z-40 bg-bg/97 backdrop-blur-sm flex flex-col items-center justify-center gap-8 md:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -110,6 +133,14 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          <a
+            href="/Resume_2026_Ichlasul_Fikri.pdf"
+            download
+            className="font-mono text-sm text-fg-muted hover:text-accent transition-colors"
+            onClick={() => setMobileOpen(false)}
+          >
+            download résumé
+          </a>
         </div>
       )}
     </>

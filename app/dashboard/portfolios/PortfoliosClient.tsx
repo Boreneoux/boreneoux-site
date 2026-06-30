@@ -189,13 +189,20 @@ export function PortfoliosClient({ initialData }: Props) {
               </div>
             </div>
 
-            {(["shortDescription", "situation", "task", "action", "result"] as const).map((field) => (
-              <div key={field}>
-                <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">{field}</label>
+            {([
+              { key: "shortDescription", label: "Short Description", hint: "1–2 sentences for listings" },
+              { key: "situation", label: "¶1 — Context & Background", hint: "The problem space, who was involved" },
+              { key: "task", label: "¶2 — The Challenge", hint: "What needed to be done and why it was hard" },
+              { key: "action", label: "¶3 — What You Built", hint: "Your approach, decisions, and execution" },
+              { key: "result", label: "¶4 — Impact & Outcome", hint: "Measurable results and what it meant" },
+            ] as const).map(({ key, label, hint }) => (
+              <div key={key}>
+                <label className="block text-xs font-mono text-fg-subtle mb-0.5 uppercase">{label}</label>
+                <p className="text-[11px] text-fg-subtle/70 mb-1">{hint}</p>
                 <textarea
-                  rows={3}
-                  value={form[field]}
-                  onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+                  rows={key === "shortDescription" ? 2 : 3}
+                  value={form[key]}
+                  onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
                   className="w-full px-3 py-2 rounded-lg border border-border bg-bg text-sm text-fg focus:outline-none focus:border-accent resize-none"
                 />
               </div>

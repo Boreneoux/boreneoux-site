@@ -43,33 +43,43 @@ export function Skills({ skills }: SkillsProps) {
     <section id="skills" className="py-16 md:py-28 px-5">
       <div className="max-w-5xl mx-auto">
         <SectionLabel>what i work with</SectionLabel>
-        <h2 className="font-serif italic text-4xl md:text-5xl text-fg mb-12">
+        <h2 className="font-serif italic text-4xl md:text-5xl text-fg mb-14">
           skills.
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-10">
           {CATEGORY_ORDER.map((cat, i) => (
             <motion.div
               key={cat}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="space-y-4"
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8"
             >
-              <h3 className="font-mono text-xs uppercase tracking-widest text-accent-alt">
-                {CATEGORY_LABELS[cat]}
-              </h3>
+              {/* Category label — fixed width on desktop */}
+              <div className="sm:w-32 shrink-0 pt-1">
+                <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-accent-alt">
+                  {CATEGORY_LABELS[cat]}
+                </span>
+              </div>
+
+              {/* Skill chips */}
               <div className="flex flex-wrap gap-2">
                 {grouped[cat].map((skill) => {
                   const Icon = ICON_MAP[skill.icon];
                   return (
                     <div
                       key={skill.id}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-bg-surface border border-border-muted text-sm text-fg-muted hover:text-fg hover:border-border transition-colors"
+                      className="group flex items-center gap-2 px-3.5 py-2 rounded-lg bg-bg-surface border border-border-muted text-sm text-fg-muted hover:text-fg hover:border-border hover:bg-bg-elevated transition-all duration-150 cursor-default"
                     >
-                      {Icon && <Icon size={14} className="text-accent shrink-0" />}
-                      <span className="font-medium">{skill.name}</span>
+                      {Icon && (
+                        <Icon
+                          size={13}
+                          className="text-fg-subtle group-hover:text-accent-alt transition-colors shrink-0"
+                        />
+                      )}
+                      <span className="font-medium text-[13px]">{skill.name}</span>
                     </div>
                   );
                 })}

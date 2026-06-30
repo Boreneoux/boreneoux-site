@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { TechTagList } from "@/components/ui/TechTag";
-import { SectionLabel } from "@/components/ui/SectionLabel";
 import { truncate } from "@/lib/utils";
 import type { PortfolioData } from "@/types";
 
@@ -24,21 +23,24 @@ export default async function WorkPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen py-16 px-5">
+      <main className="min-h-screen py-14 px-5">
         <div className="max-w-5xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg transition-colors mb-12 font-medium"
+            className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg transition-colors mb-12 font-mono group"
           >
-            <ArrowLeft size={14} /> Home
+            <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+            home
           </Link>
 
-          <SectionLabel>all projects</SectionLabel>
-          <h1 className="font-serif italic text-5xl md:text-7xl text-fg mb-16">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-fg-subtle mb-4">
+            all projects
+          </p>
+          <h1 className="font-serif italic text-5xl md:text-7xl text-fg mb-16 leading-tight">
             work.
           </h1>
 
-          <div className="flex flex-col gap-16 md:gap-24">
+          <div className="flex flex-col gap-20 md:gap-28">
             {(portfolios as unknown as PortfolioData[]).map((p, i) => {
               const isEven = i % 2 === 0;
               return (
@@ -47,24 +49,25 @@ export default async function WorkPage() {
                   href={`/work/${p.slug}`}
                   className="group block"
                 >
-                  <div
-                    className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-6 md:gap-12 items-center`}
-                  >
-                    <div className="w-full md:w-1/2 overflow-hidden rounded-xl bg-bg-surface aspect-video">
-                      <Image
-                        src={p.imageUrl}
-                        alt={p.title}
-                        width={640}
-                        height={360}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                  <div className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-8 md:gap-12 items-center`}>
+                    {/* Image */}
+                    <div className="w-full md:w-[55%] overflow-hidden rounded-2xl bg-bg-surface relative">
+                      <div className="absolute top-4 left-4 z-10 font-mono text-[11px] text-white/80 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-md">
+                        — {String(i + 1).padStart(2, "0")}
+                      </div>
+                      <div className="aspect-video">
+                        <Image
+                          src={p.imageUrl}
+                          alt={p.title}
+                          width={640}
+                          height={360}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        />
+                      </div>
                     </div>
-                    <div
-                      className={`w-full md:w-1/2 flex flex-col gap-3 ${isEven ? "" : "md:items-end md:text-right"}`}
-                    >
-                      <span className="font-mono text-xs text-fg-subtle">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+
+                    {/* Content */}
+                    <div className={`w-full md:w-[45%] flex flex-col gap-3 ${isEven ? "" : "md:items-end md:text-right"}`}>
                       <h2 className="font-serif italic text-2xl md:text-3xl text-fg group-hover:text-accent transition-colors leading-snug">
                         {p.title}
                       </h2>

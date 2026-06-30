@@ -141,3 +141,20 @@ body::after {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--fg-subtle);
 }
+
+/* ============================================
+   PROSE CUSTOM (project detail narrative)
+   ============================================ */
+.prose-custom p {
+  color: var(--fg-muted);
+  line-height: 1.8;
+}
+
+/* ============================================
+   FOCUS VISIBLE
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

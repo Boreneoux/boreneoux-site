@@ -31,13 +31,6 @@ export async function generateMetadata({
   };
 }
 
-const STAR_ITEMS = [
-  { key: "situation", label: "Situation" },
-  { key: "task", label: "Task" },
-  { key: "action", label: "Action" },
-  { key: "result", label: "Result" },
-] as const;
-
 export default async function ProjectDetailPage({
   params,
 }: {
@@ -50,26 +43,105 @@ export default async function ProjectDetailPage({
   const p = portfolio as unknown as PortfolioData;
   const links = (Array.isArray(p.links) ? p.links : []) as PortfolioLink[];
 
+  const githubLinks = links.filter((l) => l.type === "github");
+  const demoLinks = links.filter((l) => l.type !== "github");
+
   return (
     <>
       <Navbar />
-      <main className="min-h-screen py-16 px-5">
-        <div className="max-w-4xl mx-auto">
+      <main className="min-h-screen pb-24 pt-12 px-5">
+        <div className="max-w-3xl mx-auto">
+          {/* Back */}
           <Link
             href="/work"
-            className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg transition-colors mb-10 font-medium"
+            className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg transition-colors mb-12 font-mono group"
           >
-            <ArrowLeft size={14} /> All work
+            <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+            all projects
           </Link>
 
           {/* Header */}
-          <div className="mb-8 space-y-4">
+          <div className="mb-10 space-y-5">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-fg-subtle">
+              case study
+            </p>
             <h1 className="font-serif italic text-4xl md:text-6xl text-fg leading-tight">
               {p.title}
             </h1>
+
+            {/* Tech stack */}
             <TechTagList items={p.techStack} />
+
+            {/* Links — prominent CTAs */}
             {links.length > 0 && (
-              <div className="flex flex-wrap gap-3 pt-1">
+              <div className="flex flex-wrap gap-3 pt-2">
+                {demoLinks.map((link, i) => (
+                  <a
+                    key={`demo-${i}`}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-fg text-bg text-sm font-medium hover:bg-accent transition-colors"
+                  >
+                    <ExternalLink size={14} />
+                    {link.label}
+                  </a>
+                ))}
+                {githubLinks.map((link, i) => (
+                  <a
+                    key={`gh-${i}`}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-border text-fg-muted text-sm font-medium hover:border-accent hover:text-accent transition-colors"
+                  >
+                    <FaGithub size={14} />
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Hero image */}
+          <div className="mb-14 rounded-2xl overflow-hidden bg-bg-surface">
+            <div className="aspect-video">
+              <Image
+                src={p.imageUrl}
+                alt={p.title}
+                width={900}
+                height={506}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Narrative — flowing prose, no STAR labels */}
+          <article className="prose-custom">
+            {/* Lead */}
+            {p.shortDescription && (
+              <p className="text-lg md:text-xl text-fg leading-relaxed font-medium mb-8 border-l-2 border-accent pl-5">
+                {p.shortDescription}
+              </p>
+            )}
+
+            {/* Story paragraphs — displayed as natural prose */}
+            <div className="space-y-6 text-fg-muted leading-relaxed text-base md:text-[16.5px]">
+              {p.situation && <p>{p.situation}</p>}
+              {p.task && <p>{p.task}</p>}
+              {p.action && <p>{p.action}</p>}
+              {p.result && <p>{p.result}</p>}
+            </div>
+          </article>
+
+          {/* Bottom links (repeat) */}
+          {links.length > 0 && (
+            <div className="mt-14 pt-10 border-t border-border-muted">
+              <p className="text-sm font-mono text-fg-subtle mb-4 uppercase tracking-widest text-[11px]">
+                Links
+              </p>
+              <div className="flex flex-wrap gap-3">
                 {links.map((link, i) => (
                   <a
                     key={i}
@@ -87,53 +159,18 @@ export default async function ProjectDetailPage({
                   </a>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Hero image */}
-          <div className="mb-12 rounded-2xl overflow-hidden bg-bg-surface aspect-video">
-            <Image
-              src={p.imageUrl}
-              alt={p.title}
-              width={900}
-              height={506}
-              className="w-full h-full object-cover"
-              priority
-            />
-          </div>
-
-          {/* Description */}
-          <div className="mb-12">
-            <h2 className="font-serif text-2xl text-fg mb-4">About the Project</h2>
-            <p className="text-fg-muted leading-relaxed text-base md:text-lg">
-              {p.shortDescription}
-            </p>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-border-muted mb-12" />
-
-          {/* S.T.A.R */}
-          <div>
-            <h2 className="font-serif text-2xl text-fg mb-8">
-              Project Journey{" "}
-              <span className="font-mono text-sm text-fg-subtle">(S.T.A.R)</span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {STAR_ITEMS.map(({ key, label }) => (
-                <div
-                  key={key}
-                  className="p-6 rounded-xl bg-bg-surface border border-border-muted space-y-3"
-                >
-                  <h3 className="font-mono text-xs uppercase tracking-widest text-accent-alt">
-                    {label}
-                  </h3>
-                  <p className="text-sm text-fg-muted leading-relaxed">
-                    {p[key]}
-                  </p>
-                </div>
-              ))}
             </div>
+          )}
+
+          {/* Back to work */}
+          <div className="mt-16">
+            <Link
+              href="/work"
+              className="inline-flex items-center gap-2 text-sm text-fg-muted hover:text-fg transition-colors font-mono group"
+            >
+              <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+              Back to all projects
+            </Link>
           </div>
         </div>
       </main>
