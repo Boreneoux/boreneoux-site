@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
+/* ============================================
+   DESIGN TOKENS — Warm Personal Palette
+   ============================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --bg:          #F7F3ED;
+  --bg-surface:  #EEEAE3;
+  --bg-elevated: #E8E3DB;
+
+  /* Foreground */
+  --fg:          #1A1713;
+  --fg-muted:    #6B6258;
+  --fg-subtle:   #9C9289;
+
+  /* Accent — dusty mauve (warm, not cold purple) */
+  --accent:      #7C6A9A;
+  --accent-light: #B5A4D0;
+  --accent-fg:   #F7F3ED;
+
+  /* Accent alt — terracotta */
+  --accent-alt:  #C4956A;
+
+  /* Border */
+  --border:      #D8D0C6;
+  --border-muted: #E5E0D8;
+
+  /* Fonts */
+  --font-sans:   var(--font-geist-sans);
+  --font-mono:   var(--font-geist-mono);
+  --font-serif:  var(--font-instrument-serif);
 }
 
+.dark {
+  --bg:          #18150F;
+  --bg-surface:  #231F17;
+  --bg-elevated: #2E2921;
+
+  --fg:          #F0EBE3;
+  --fg-muted:    #9C9289;
+  --fg-subtle:   #6B6258;
+
+  --accent:      #B5A4D0;
+  --accent-light: #7C6A9A;
+  --accent-fg:   #18150F;
+
+  --accent-alt:  #D4A574;
+
+  --border:      #342F27;
+  --border-muted: #2A2520;
+}
+
+/* ============================================
+   TAILWIND THEME EXTENSIONS
+   ============================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg:           var(--bg);
+  --color-bg-surface:   var(--bg-surface);
+  --color-bg-elevated:  var(--bg-elevated);
+  --color-fg:           var(--fg);
+  --color-fg-muted:     var(--fg-muted);
+  --color-fg-subtle:    var(--fg-subtle);
+  --color-accent:       var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-fg:    var(--accent-fg);
+  --color-accent-alt:   var(--accent-alt);
+  --color-border:       var(--border);
+  --color-border-muted: var(--border-muted);
+  --font-sans:   var(--font-sans);
+  --font-mono:   var(--font-mono);
+  --font-serif:  var(--font-serif);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================
+   BASE STYLES
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ============================================
+   GRAIN TEXTURE OVERLAY
+   ============================================ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+}
+
+.dark body::after {
+  opacity: 0.045;
+}
+
+/* ============================================
+   TYPOGRAPHY HELPERS
+   ============================================ */
+.font-display {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* ============================================
+   SCROLLBAR (subtle, warm)
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-subtle);
 }
