@@ -30,7 +30,11 @@ function ThemeToggle() {
   );
 }
 
-export function Navbar() {
+interface NavbarProps {
+  resumeUrl?: string;
+}
+
+export function Navbar({ resumeUrl }: NavbarProps) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -94,13 +98,17 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <a
-                href="/Resume_2026_Ichlasul_Fikri.pdf"
-                download
-                className="text-sm text-fg-subtle hover:text-fg transition-colors font-mono"
-              >
-                résumé
-              </a>
+              {resumeUrl && (
+                <a
+                  href={resumeUrl}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-fg-subtle hover:text-fg transition-colors font-mono"
+                >
+                  résumé
+                </a>
+              )}
             </div>
           )}
 
@@ -133,14 +141,18 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <a
-            href="/Resume_2026_Ichlasul_Fikri.pdf"
-            download
-            className="font-mono text-sm text-fg-muted hover:text-accent transition-colors"
-            onClick={() => setMobileOpen(false)}
-          >
-            download résumé
-          </a>
+          {resumeUrl && (
+            <a
+              href={resumeUrl}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-sm text-fg-muted hover:text-accent transition-colors"
+              onClick={() => setMobileOpen(false)}
+            >
+              download résumé
+            </a>
+          )}
         </div>
       )}
     </>

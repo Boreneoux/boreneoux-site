@@ -1,7 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Pencil, Star } from "lucide-react";
+import { Plus, Pencil, Star, GripVertical } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { DeleteDialog } from "@/components/dashboard/DeleteDialog";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import type { PortfolioData, PortfolioLink, PortfolioLinkType } from "@/types";
@@ -25,6 +40,50 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
 }
 
+function SortableRow({
+  p,
+  onEdit,
+  onRemove,
+}: {
+  p: PortfolioData;
+  onEdit: (p: PortfolioData) => void;
+  onRemove: (id: string) => Promise<void>;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: p.id });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={`flex items-center gap-3 px-4 py-3 border-b border-border-muted last:border-0 bg-bg ${isDragging ? "opacity-50 shadow-lg rounded-lg" : ""}`}
+    >
+      <button
+        {...attributes}
+        {...listeners}
+        className="text-fg-subtle/40 hover:text-fg-subtle transition-colors cursor-grab active:cursor-grabbing touch-none shrink-0"
+        aria-label="Drag to reorder"
+      >
+        <GripVertical size={15} />
+      </button>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-fg truncate">{p.title}</p>
+        <p className="font-mono text-xs text-fg-subtle truncate">{p.slug}</p>
+      </div>
+      {p.featured && <Star size={13} className="text-accent-alt shrink-0" />}
+      <div className="flex items-center gap-1 shrink-0">
+        <button
+          onClick={() => onEdit(p)}
+          className="p-1.5 text-fg-subtle hover:text-accent transition-colors"
+        >
+          <Pencil size={14} />
+        </button>
+        <DeleteDialog onConfirm={() => onRemove(p.id)} label="portfolio" />
+      </div>
+    </div>
+  );
+}
+
 interface Props {
   initialData: PortfolioData[];
 }
@@ -35,6 +94,10 @@ export function PortfoliosClient({ initialData }: Props) {
   const [editing, setEditing] = useState<PortfolioData | null>(null);
   const [form, setForm] = useState<Omit<PortfolioData, "id">>(EMPTY);
   const [saving, setSaving] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
 
   function openAdd() {
     setEditing(null);
@@ -48,9 +111,31 @@ export function PortfoliosClient({ initialData }: Props) {
     setModalOpen(true);
   }
 
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setData((items) => {
+      const oldIndex = items.findIndex((i) => i.id === active.id);
+      const newIndex = items.findIndex((i) => i.id === over.id);
+      const reordered = arrayMove(items, oldIndex, newIndex).map((item, i) => ({
+        ...item,
+        order: i + 1,
+      }));
+      fetch("/api/portfolios", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reordered.map(({ id, order }) => ({ id, order }))),
+      });
+      return reordered;
+    });
+  }
+
   async function save() {
     setSaving(true);
-    const payload = editing ? { ...form, id: editing.id } : form;
+    const payload = editing
+      ? { ...form, id: editing.id, order: editing.order }
+      : { ...form, order: data.length + 1 };
     const method = editing ? "PUT" : "POST";
     const res = await fetch("/api/portfolios", {
       method,
@@ -103,7 +188,7 @@ export function PortfoliosClient({ initialData }: Props) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-serif italic text-3xl text-fg">Portfolios</h1>
-          <p className="text-sm text-fg-muted mt-0.5">{data.length} projects</p>
+          <p className="text-sm text-fg-muted mt-0.5">{data.length} projects — drag to reorder</p>
         </div>
         <button
           onClick={openAdd}
@@ -114,51 +199,28 @@ export function PortfoliosClient({ initialData }: Props) {
       </div>
 
       <div className="rounded-xl border border-border-muted overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-bg-surface border-b border-border-muted">
-            <tr>
-              <th className="text-left px-4 py-3 text-xs font-mono uppercase text-fg-subtle">Title</th>
-              <th className="text-left px-4 py-3 text-xs font-mono uppercase text-fg-subtle hidden md:table-cell">Slug</th>
-              <th className="text-center px-4 py-3 text-xs font-mono uppercase text-fg-subtle">Featured</th>
-              <th className="text-right px-4 py-3 text-xs font-mono uppercase text-fg-subtle">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border-muted">
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={data.map((p) => p.id)} strategy={verticalListSortingStrategy}>
             {data.map((p) => (
-              <tr key={p.id} className="hover:bg-bg-surface/50 transition-colors">
-                <td className="px-4 py-3 font-medium text-fg">{p.title}</td>
-                <td className="px-4 py-3 font-mono text-xs text-fg-subtle hidden md:table-cell">{p.slug}</td>
-                <td className="px-4 py-3 text-center">
-                  {p.featured && <Star size={14} className="text-accent-alt mx-auto" />}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-1">
-                    <button
-                      onClick={() => openEdit(p)}
-                      className="p-1.5 text-fg-subtle hover:text-accent transition-colors"
-                    >
-                      <Pencil size={15} />
-                    </button>
-                    <DeleteDialog onConfirm={() => remove(p.id)} label="portfolio" />
-                  </div>
-                </td>
-              </tr>
+              <SortableRow key={p.id} p={p} onEdit={openEdit} onRemove={remove} />
             ))}
-            {data.length === 0 && (
-              <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-fg-subtle text-sm">
-                  No portfolios yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+          </SortableContext>
+        </DndContext>
+        {data.length === 0 && (
+          <p className="px-4 py-8 text-center text-fg-subtle text-sm">No portfolios yet.</p>
+        )}
       </div>
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm px-5 py-10 overflow-y-auto">
-          <div className="bg-bg border border-border rounded-xl p-6 max-w-2xl w-full shadow-xl space-y-4 my-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm px-5 py-10 overflow-y-auto"
+          onClick={() => setModalOpen(false)}
+        >
+          <div
+            className="bg-bg border border-border rounded-xl p-6 max-w-2xl w-full shadow-xl space-y-4 my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="font-serif italic text-2xl text-fg">
               {editing ? "Edit Portfolio" : "Add Portfolio"}
             </h2>
@@ -262,27 +324,16 @@ export function PortfoliosClient({ initialData }: Props) {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">Order</label>
+            <div className="flex items-center pt-1">
+              <label className="flex items-center gap-2 cursor-pointer text-sm text-fg-muted">
                 <input
-                  type="number"
-                  value={form.order}
-                  onChange={(e) => setForm((f) => ({ ...f, order: Number(e.target.value) }))}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-bg text-sm text-fg focus:outline-none focus:border-accent"
+                  type="checkbox"
+                  checked={form.featured}
+                  onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
+                  className="accent-[var(--accent)]"
                 />
-              </div>
-              <div className="flex items-end pb-2">
-                <label className="flex items-center gap-2 cursor-pointer text-sm text-fg-muted">
-                  <input
-                    type="checkbox"
-                    checked={form.featured}
-                    onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
-                    className="accent-[var(--accent)]"
-                  />
-                  Featured on home
-                </label>
-              </div>
+                Featured on home
+              </label>
             </div>
 
             <div>

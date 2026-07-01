@@ -12,25 +12,26 @@ import type { ExperienceData, PortfolioData, SkillData } from "@/types";
 export const revalidate = false;
 
 async function getData() {
-  const [experiences, portfolios, skills] = await Promise.all([
+  const [experiences, portfolios, skills, resumeSetting] = await Promise.all([
     prisma.experience.findMany({ orderBy: { order: "asc" } }),
     prisma.portfolio.findMany({
       where: { featured: true },
       orderBy: { order: "asc" },
     }),
     prisma.skill.findMany({ orderBy: { order: "asc" } }),
+    prisma.siteSetting.findUnique({ where: { key: "resumeUrl" } }),
   ]);
-  return { experiences, portfolios, skills };
+  return { experiences, portfolios, skills, resumeUrl: resumeSetting?.value ?? "" };
 }
 
 export default async function Home() {
-  const { experiences, portfolios, skills } = await getData();
+  const { experiences, portfolios, skills, resumeUrl } = await getData();
 
   return (
     <>
-      <Navbar />
+      <Navbar resumeUrl={resumeUrl} />
       <main>
-        <Hero />
+        <Hero resumeUrl={resumeUrl} />
         <About />
         <Skills skills={skills as SkillData[]} />
         <Experience experiences={experiences as ExperienceData[]} />

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import { Briefcase, Code2, GraduationCap, LayoutDashboard, LogOut } from "lucide-react";
+import { Briefcase, Code2, GraduationCap, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { href: "/dashboard/experiences", label: "Experiences", icon: GraduationCap },
   { href: "/dashboard/portfolios", label: "Portfolios", icon: Briefcase },
   { href: "/dashboard/skills", label: "Skills", icon: Code2 },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 interface DashboardSidebarProps {

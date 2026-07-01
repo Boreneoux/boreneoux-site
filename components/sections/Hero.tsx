@@ -52,7 +52,7 @@ function Typewriter() {
   );
 }
 
-export function Hero() {
+export function Hero({ resumeUrl }: { resumeUrl?: string }) {
   return (
     <section className="min-h-[calc(100vh-64px)] flex flex-col justify-center py-14 px-5">
       <div className="max-w-5xl mx-auto w-full">
@@ -122,14 +122,18 @@ export function Hero() {
               >
                 Contact
               </Link>
-              <a
-                href="/Resume_2026_Ichlasul_Fikri.pdf"
-                download
-                className="inline-flex items-center gap-1.5 text-sm text-fg-subtle hover:text-accent transition-colors font-mono group"
-              >
-                resume.pdf
-                <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+              {resumeUrl && (
+                <a
+                  href={resumeUrl}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-fg-subtle hover:text-accent transition-colors font-mono group"
+                >
+                  resume.pdf
+                  <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
+              )}
             </div>
 
             {/* Socials */}

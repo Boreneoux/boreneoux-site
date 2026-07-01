@@ -31,6 +31,18 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json(experience);
 }
 
+export async function PATCH(req: NextRequest) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const items: { id: string; order: number }[] = await req.json();
+  await Promise.all(
+    items.map(({ id, order }) => prisma.experience.update({ where: { id }, data: { order } }))
+  );
+  revalidatePath("/");
+  return NextResponse.json({ ok: true });
+}
+
 export async function DELETE(req: NextRequest) {
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

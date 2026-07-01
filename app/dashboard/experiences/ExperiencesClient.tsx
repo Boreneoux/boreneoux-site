@@ -1,12 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Pencil } from "lucide-react";
+import { Plus, Pencil, GripVertical } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { DeleteDialog } from "@/components/dashboard/DeleteDialog";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import type { ExperienceData } from "@/types";
 
-const EMPTY: Omit<ExperienceData, "id"> = {
+const EMPTY: Omit<ExperienceData, "id" | "order"> = {
   company: "",
   position: "",
   dateIn: "",
@@ -14,8 +29,53 @@ const EMPTY: Omit<ExperienceData, "id"> = {
   description: [],
   techStack: [],
   imageUrl: "",
-  order: 0,
 };
+
+function SortableRow({
+  exp,
+  onEdit,
+  onRemove,
+}: {
+  exp: ExperienceData;
+  onEdit: (e: ExperienceData) => void;
+  onRemove: (id: string) => Promise<void>;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: exp.id });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={`flex items-center gap-3 px-4 py-3 border-b border-border-muted last:border-0 bg-bg ${isDragging ? "opacity-50 shadow-lg rounded-lg" : ""}`}
+    >
+      <button
+        {...attributes}
+        {...listeners}
+        className="text-fg-subtle/40 hover:text-fg-subtle transition-colors cursor-grab active:cursor-grabbing touch-none"
+        aria-label="Drag to reorder"
+      >
+        <GripVertical size={15} />
+      </button>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-fg truncate">{exp.company}</p>
+        <p className="text-xs text-fg-muted truncate">{exp.position}</p>
+      </div>
+      <span className="font-mono text-xs text-fg-subtle hidden md:block shrink-0">
+        {exp.dateIn} – {exp.dateOut}
+      </span>
+      <div className="flex items-center gap-1 shrink-0">
+        <button
+          onClick={() => onEdit(exp)}
+          className="p-1.5 text-fg-subtle hover:text-accent transition-colors"
+        >
+          <Pencil size={14} />
+        </button>
+        <DeleteDialog onConfirm={() => onRemove(exp.id)} label="experience" />
+      </div>
+    </div>
+  );
+}
 
 interface Props {
   initialData: ExperienceData[];
@@ -25,8 +85,12 @@ export function ExperiencesClient({ initialData }: Props) {
   const [data, setData] = useState(initialData);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<ExperienceData | null>(null);
-  const [form, setForm] = useState<Omit<ExperienceData, "id">>(EMPTY);
+  const [form, setForm] = useState<Omit<ExperienceData, "id" | "order">>(EMPTY);
   const [saving, setSaving] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
 
   function openAdd() {
     setEditing(null);
@@ -42,7 +106,9 @@ export function ExperiencesClient({ initialData }: Props) {
 
   async function save() {
     setSaving(true);
-    const payload = editing ? { ...form, id: editing.id } : form;
+    const payload = editing
+      ? { ...form, id: editing.id, order: editing.order }
+      : { ...form, order: data.length + 1 };
     const method = editing ? "PUT" : "POST";
     const res = await fetch("/api/experiences", {
       method,
@@ -68,12 +134,32 @@ export function ExperiencesClient({ initialData }: Props) {
     setData((d) => d.filter((e) => e.id !== id));
   }
 
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setData((items) => {
+      const oldIndex = items.findIndex((i) => i.id === active.id);
+      const newIndex = items.findIndex((i) => i.id === over.id);
+      const reordered = arrayMove(items, oldIndex, newIndex).map((item, i) => ({
+        ...item,
+        order: i + 1,
+      }));
+      fetch("/api/experiences", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reordered.map(({ id, order }) => ({ id, order }))),
+      });
+      return reordered;
+    });
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-serif italic text-3xl text-fg">Experiences</h1>
-          <p className="text-sm text-fg-muted mt-0.5">{data.length} entries</p>
+          <p className="text-sm text-fg-muted mt-0.5">{data.length} entries — drag to reorder</p>
         </div>
         <button
           onClick={openAdd}
@@ -84,51 +170,28 @@ export function ExperiencesClient({ initialData }: Props) {
       </div>
 
       <div className="rounded-xl border border-border-muted overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-bg-surface border-b border-border-muted">
-            <tr>
-              <th className="text-left px-4 py-3 text-xs font-mono uppercase text-fg-subtle">Company</th>
-              <th className="text-left px-4 py-3 text-xs font-mono uppercase text-fg-subtle hidden md:table-cell">Position</th>
-              <th className="text-left px-4 py-3 text-xs font-mono uppercase text-fg-subtle hidden md:table-cell">Period</th>
-              <th className="text-right px-4 py-3 text-xs font-mono uppercase text-fg-subtle">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border-muted">
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={data.map((e) => e.id)} strategy={verticalListSortingStrategy}>
             {data.map((exp) => (
-              <tr key={exp.id} className="hover:bg-bg-surface/50 transition-colors">
-                <td className="px-4 py-3 font-medium text-fg">{exp.company}</td>
-                <td className="px-4 py-3 text-fg-muted hidden md:table-cell">{exp.position}</td>
-                <td className="px-4 py-3 text-fg-subtle font-mono text-xs hidden md:table-cell">
-                  {exp.dateIn} – {exp.dateOut}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-1">
-                    <button
-                      onClick={() => openEdit(exp)}
-                      className="p-1.5 text-fg-subtle hover:text-accent transition-colors"
-                    >
-                      <Pencil size={15} />
-                    </button>
-                    <DeleteDialog onConfirm={() => remove(exp.id)} label="experience" />
-                  </div>
-                </td>
-              </tr>
+              <SortableRow key={exp.id} exp={exp} onEdit={openEdit} onRemove={remove} />
             ))}
-            {data.length === 0 && (
-              <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-fg-subtle text-sm">
-                  No experiences yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+          </SortableContext>
+        </DndContext>
+        {data.length === 0 && (
+          <p className="px-4 py-8 text-center text-fg-subtle text-sm">No experiences yet.</p>
+        )}
       </div>
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-5 py-10 overflow-y-auto">
-          <div className="bg-bg border border-border rounded-xl p-6 max-w-lg w-full shadow-xl space-y-4 my-auto">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-5 py-10 overflow-y-auto"
+          onClick={() => setModalOpen(false)}
+        >
+          <div
+            className="bg-bg border border-border rounded-xl p-6 max-w-lg w-full shadow-xl space-y-4 my-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="font-serif italic text-2xl text-fg">
               {editing ? "Edit Experience" : "Add Experience"}
             </h2>
@@ -176,18 +239,6 @@ export function ExperiencesClient({ initialData }: Props) {
                       techStack: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
                     }))
                   }
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-bg text-sm text-fg focus:outline-none focus:border-accent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">
-                  Order
-                </label>
-                <input
-                  type="number"
-                  value={form.order}
-                  onChange={(e) => setForm((f) => ({ ...f, order: Number(e.target.value) }))}
                   className="w-full px-3 py-2 rounded-lg border border-border bg-bg text-sm text-fg focus:outline-none focus:border-accent"
                 />
               </div>
