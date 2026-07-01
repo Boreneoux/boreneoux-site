@@ -71,7 +71,7 @@ export function Hero({ resumeUrl }: { resumeUrl?: string }) {
         </motion.div>
 
         {/* Main layout */}
-        <div className="flex flex-col md:flex-row md:items-end gap-12 md:gap-16">
+        <div className="flex flex-col md:flex-row md:items-center gap-12 md:gap-16">
           {/* Text block */}
           <motion.div
             className="flex-1 min-w-0"
@@ -155,7 +155,7 @@ export function Hero({ resumeUrl }: { resumeUrl?: string }) {
 
           {/* Photo - portrait with decorative frame */}
           <motion.div
-            className="flex-shrink-0 self-center md:self-end"
+            className="flex-shrink-0 self-center"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
@@ -167,12 +167,12 @@ export function Hero({ resumeUrl }: { resumeUrl?: string }) {
               <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-accent-alt/60 rounded-tl-sm pointer-events-none" />
 
               {/* Photo */}
-              <div className="relative w-52 h-[17rem] sm:w-60 sm:h-[20rem] md:w-64 md:h-[21rem] rounded-2xl overflow-hidden bg-bg-surface">
+              <div className="relative w-60 h-[22rem] sm:w-72 sm:h-[26rem] md:w-80 md:h-[30rem] rounded-2xl overflow-hidden bg-bg-surface">
                 <Image
                   src="/images/ichlasul.jpg"
                   alt="Ichlasul Fikri"
                   fill
-                  sizes="(max-width: 640px) 208px, (max-width: 768px) 240px, 256px"
+                  sizes="(max-width: 640px) 240px, (max-width: 768px) 288px, 320px"
                   className="object-cover object-center"
                   priority
                 />

@@ -34,7 +34,7 @@ export default async function Home() {
         <Hero resumeUrl={resumeUrl} />
         <About />
         <Skills skills={skills as SkillData[]} />
-        <Experience experiences={experiences as ExperienceData[]} />
+        <Experience experiences={experiences as ExperienceData[]} resumeUrl={resumeUrl} />
         <FeaturedWork portfolios={portfolios as unknown as PortfolioData[]} />
         <Contact />
       </main>

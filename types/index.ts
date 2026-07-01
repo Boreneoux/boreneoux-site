@@ -22,6 +22,7 @@ export interface ExperienceData {
   description: string[];
   techStack: string[];
   imageUrl: string;
+  type: "work" | "edu";
   order: number;
 }
 

@@ -9,9 +9,10 @@ import { Download } from "lucide-react";
 
 interface ExperienceProps {
   experiences: ExperienceData[];
+  resumeUrl?: string;
 }
 
-export function Experience({ experiences }: ExperienceProps) {
+export function Experience({ experiences, resumeUrl }: ExperienceProps) {
   return (
     <section id="experience" className="py-16 md:py-28 px-5">
       <div className="max-w-5xl mx-auto">
@@ -34,8 +35,12 @@ export function Experience({ experiences }: ExperienceProps) {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative mb-14 last:mb-0"
             >
-              {/* Timeline dot */}
-              <div className="absolute -left-8 top-[5px] w-[11px] h-[11px] rounded-full border-2 border-accent-alt bg-bg transition-colors duration-300" />
+              {/* Timeline dot — filled for work, outlined for edu */}
+              <div className={`absolute -left-8 top-[5px] w-[11px] h-[11px] rounded-full border-2 transition-colors duration-300 ${
+                exp.type === "edu"
+                  ? "border-accent bg-bg"
+                  : "border-accent-alt bg-accent-alt"
+              }`} />
 
               {/* Content card */}
               <div className="group">
@@ -52,6 +57,13 @@ export function Experience({ experiences }: ExperienceProps) {
                       />
                     </div>
                     <span className="text-sm font-semibold text-fg">{exp.company}</span>
+                    <span className={`font-mono text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded border ${
+                      exp.type === "edu"
+                        ? "text-accent border-accent/40"
+                        : "text-accent-alt border-accent-alt/40"
+                    }`}>
+                      {exp.type === "edu" ? "edu" : "work"}
+                    </span>
                   </div>
                   <span className="font-mono text-xs text-fg-subtle shrink-0">
                     {exp.dateIn} – {exp.dateOut}
@@ -94,14 +106,18 @@ export function Experience({ experiences }: ExperienceProps) {
                 Grab my resume - covers everything above in one page.
               </p>
             </div>
-            <a
-              href="/Resume_2026_Ichlasul_Fikri.pdf"
-              download
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-fg text-bg text-sm font-medium hover:bg-accent transition-colors shrink-0"
-            >
-              <Download size={14} />
-              Download Resume
-            </a>
+            {resumeUrl && (
+              <a
+                href={resumeUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-fg text-bg text-sm font-medium hover:bg-accent transition-colors shrink-0"
+              >
+                <Download size={14} />
+                Download Resume
+              </a>
+            )}
           </div>
         </motion.div>
       </div>

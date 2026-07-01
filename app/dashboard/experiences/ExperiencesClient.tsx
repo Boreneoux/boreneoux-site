@@ -29,6 +29,7 @@ const EMPTY: Omit<ExperienceData, "id" | "order"> = {
   description: [],
   techStack: [],
   imageUrl: "",
+  type: "work",
 };
 
 function SortableRow({
@@ -209,6 +210,26 @@ export function ExperiencesClient({ initialData }: Props) {
                   />
                 </div>
               ))}
+
+              <div>
+                <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">Type</label>
+                <div className="flex gap-2">
+                  {(["work", "edu"] as const).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setForm((f) => ({ ...f, type: t }))}
+                      className={`flex-1 py-2 rounded-lg text-sm font-mono border transition-colors ${
+                        form.type === t
+                          ? "bg-accent text-accent-fg border-accent"
+                          : "border-border text-fg-muted hover:text-fg"
+                      }`}
+                    >
+                      {t === "work" ? "work" : "education"}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <div>
                 <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">

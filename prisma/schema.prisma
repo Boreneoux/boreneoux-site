@@ -67,6 +67,7 @@ model Experience {
   description String[]
   techStack   String[]
   imageUrl    String
+  type        String   @default("work")
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
