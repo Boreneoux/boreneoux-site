@@ -68,7 +68,7 @@ export function ProjectLinks({ links, variant = "header" }: ProjectLinksProps) {
     );
   }
 
-  // Header variant — compact pills
+  // Header variant - compact pills
   return (
     <div className="flex flex-wrap gap-2">
       {sorted.map((link, i) => {

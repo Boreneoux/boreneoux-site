@@ -120,7 +120,7 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile menu — full screen overlay */}
+      {/* Mobile menu - full screen overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-bg/97 backdrop-blur-sm flex flex-col items-center justify-center gap-8 md:hidden">
           {navLinks.map((link) => (

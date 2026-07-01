@@ -191,10 +191,10 @@ export function PortfoliosClient({ initialData }: Props) {
 
             {([
               { key: "shortDescription", label: "Short Description", hint: "1–2 sentences for listings" },
-              { key: "situation", label: "¶1 — Context & Background", hint: "The problem space, who was involved" },
-              { key: "task", label: "¶2 — The Challenge", hint: "What needed to be done and why it was hard" },
-              { key: "action", label: "¶3 — What You Built", hint: "Your approach, decisions, and execution" },
-              { key: "result", label: "¶4 — Impact & Outcome", hint: "Measurable results and what it meant" },
+              { key: "situation", label: "¶1 - Context & Background", hint: "The problem space, who was involved" },
+              { key: "task", label: "¶2 - The Challenge", hint: "What needed to be done and why it was hard" },
+              { key: "action", label: "¶3 - What You Built", hint: "Your approach, decisions, and execution" },
+              { key: "result", label: "¶4 - Impact & Outcome", hint: "Measurable results and what it meant" },
             ] as const).map(({ key, label, hint }) => (
               <div key={key}>
                 <label className="block text-xs font-mono text-fg-subtle mb-0.5 uppercase">{label}</label>

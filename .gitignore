@@ -44,3 +44,8 @@ next-env.d.ts
 
 # credentials — never commit
 requirements.md
+
+# AI/agent context files
+CLAUDE.md
+AGENTS.md
+PLAN.md

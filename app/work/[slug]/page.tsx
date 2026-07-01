@@ -26,7 +26,7 @@ export async function generateMetadata({
   const portfolio = await prisma.portfolio.findUnique({ where: { slug } });
   if (!portfolio) return { title: "Not Found" };
   return {
-    title: `${portfolio.title} — Boreneoux`,
+    title: `${portfolio.title} - Boreneoux`,
     description: portfolio.shortDescription,
   };
 }
@@ -58,7 +58,7 @@ export default async function ProjectDetailPage({
             all projects
           </Link>
 
-          {/* Header — title + meta only */}
+          {/* Header - title + meta only */}
           <div className="mb-10 space-y-4">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-fg-subtle">
               case study
@@ -83,7 +83,7 @@ export default async function ProjectDetailPage({
             </div>
           </div>
 
-          {/* Links — shown right after the visual, before reading */}
+          {/* Links - shown right after the visual, before reading */}
           {links.length > 0 && (
             <div className="mb-2">
               <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg-subtle mb-3">

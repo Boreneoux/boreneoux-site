@@ -21,14 +21,14 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Boreneoux — Ichlasul Fikri",
+  title: "Boreneoux - Ichlasul Fikri",
   description:
-    "Full-stack engineer working across the delivery cycle — API design, backend systems, and frontend with React & Next.js.",
+    "Full-stack engineer working across the delivery cycle - API design, backend systems, and frontend with React & Next.js.",
   authors: [{ name: "Ichlasul Fikri" }],
   openGraph: {
-    title: "Boreneoux — Ichlasul Fikri",
+    title: "Boreneoux - Ichlasul Fikri",
     description:
-      "Full-stack engineer working across the delivery cycle — API design, backend systems, and frontend with React & Next.js.",
+      "Full-stack engineer working across the delivery cycle - API design, backend systems, and frontend with React & Next.js.",
     type: "website",
   },
 };

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { LoginButton } from "./LoginButton";
 
 export const metadata = {
-  title: "Login — Boreneoux Admin",
+  title: "Login - Boreneoux Admin",
 };
 
 export default async function LoginPage() {

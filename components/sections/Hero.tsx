@@ -84,7 +84,7 @@ export function Hero() {
               cs graduate · full-stack engineer
             </p>
 
-            {/* Display name — editorial, large */}
+            {/* Display name - editorial, large */}
             <div className="mb-5">
               <h1 className="font-serif italic leading-[0.88] tracking-tight text-fg">
                 <span className="block text-[clamp(3.5rem,10vw,6.5rem)]">Ichlasul</span>
@@ -103,7 +103,7 @@ export function Hero() {
 
             {/* Bio */}
             <p className="text-fg-muted text-base leading-relaxed max-w-[38ch] mb-8">
-              Full-stack engineer across the delivery cycle — API design, backend
+              Full-stack engineer across the delivery cycle - API design, backend
               systems, and frontend with React & Next.js. Recently shipped an
               AI-assisted fintech tool. Building things deliberately.
             </p>
@@ -149,7 +149,7 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Photo — portrait with decorative frame */}
+          {/* Photo - portrait with decorative frame */}
           <motion.div
             className="flex-shrink-0 self-center md:self-end"
             initial={{ opacity: 0, y: 24 }}

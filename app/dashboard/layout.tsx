@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 
 export const metadata = {
-  title: "Dashboard — Boreneoux",
+  title: "Dashboard - Boreneoux",
 };
 
 export default async function DashboardLayout({

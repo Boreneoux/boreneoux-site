@@ -57,7 +57,7 @@ export function Skills({ skills }: SkillsProps) {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-8"
             >
-              {/* Category label — fixed width on desktop */}
+              {/* Category label - fixed width on desktop */}
               <div className="sm:w-32 shrink-0 pt-1">
                 <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-accent-alt">
                   {CATEGORY_LABELS[cat]}

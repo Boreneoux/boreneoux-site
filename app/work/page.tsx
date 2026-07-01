@@ -11,7 +11,7 @@ import type { PortfolioData } from "@/types";
 export const revalidate = false;
 
 export const metadata = {
-  title: "Work — Boreneoux",
+  title: "Work - Boreneoux",
   description: "Selected projects by Ichlasul Fikri.",
 };
 
@@ -53,7 +53,7 @@ export default async function WorkPage() {
                     {/* Image */}
                     <div className="w-full md:w-[55%] overflow-hidden rounded-2xl bg-bg-surface relative">
                       <div className="absolute top-4 left-4 z-10 font-mono text-[11px] text-white/80 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-md">
-                        — {String(i + 1).padStart(2, "0")}
+                        - {String(i + 1).padStart(2, "0")}
                       </div>
                       <div className="aspect-video">
                         <Image

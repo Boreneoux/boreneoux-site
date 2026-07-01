@@ -79,7 +79,7 @@ export function Experience({ experiences }: ExperienceProps) {
           ))}
         </div>
 
-        {/* Resume CTA — placed after experiences */}
+        {/* Resume CTA - placed after experiences */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -91,7 +91,7 @@ export function Experience({ experiences }: ExperienceProps) {
             <div>
               <p className="text-sm font-medium text-fg mb-1">Want the full picture?</p>
               <p className="text-sm text-fg-muted">
-                Grab my resume — covers everything above in one page.
+                Grab my resume - covers everything above in one page.
               </p>
             </div>
             <a
