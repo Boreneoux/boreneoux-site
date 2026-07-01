@@ -174,6 +174,7 @@ Icons are powered by [react-icons](https://react-icons.github.io/react-icons). T
 | `SiWeb3Dotjs` | Web3.js |
 | `FaLinux` | Linux |
 | `SiCodeigniter` | CodeIgniter |
+| `SiBun` | Bun |
 
 ### Tech Stack — type names (auto-matched, case-insensitive)
 

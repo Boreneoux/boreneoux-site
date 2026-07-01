@@ -28,6 +28,7 @@ import {
   SiApollographql, SiCypress, SiEslint, SiPrettier, SiStripe,
   SiIntellijidea, SiVim, SiAndroidstudio, SiXcode,
   SiSolidity, SiEthereum, SiWeb3Dotjs,
+  SiBun,
 } from "react-icons/si";
 
 export const SKILL_ICON_MAP: Record<string, ElementType> = {
@@ -81,5 +82,5 @@ export const SKILL_ICON_MAP: Record<string, ElementType> = {
   // OS
   FaLinux,
   // Misc
-  SiCodeigniter,
+  SiCodeigniter, SiBun,
 };
