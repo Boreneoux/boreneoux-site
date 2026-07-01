@@ -133,7 +133,7 @@ export function Hero() {
             </div>
 
             {/* Socials */}
-            <div className="flex items-center gap-5">
+            <div className="flex items-center justify-center md:justify-start gap-6">
               {socials.map((s) => (
                 <a
                   key={s.href}
@@ -141,9 +141,9 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="text-fg-subtle hover:text-fg transition-colors"
+                  className="text-fg-muted hover:text-fg transition-colors"
                 >
-                  <s.icon size={17} />
+                  <s.icon size={24} />
                 </a>
               ))}
             </div>
