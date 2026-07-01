@@ -31,6 +31,9 @@ export const metadata: Metadata = {
       "Full-stack engineer working across the delivery cycle - API design, backend systems, and frontend with React & Next.js.",
     type: "website",
   },
+  appleWebApp: {
+    title: "Boreneoux",
+  },
 };
 
 export default function RootLayout({
