@@ -157,6 +157,8 @@ const NAME_TO_KEY: Record<string, string> = {
   // Web3
   ethereum: "SiEthereum",
 
+  // Runtime
+  bun: "SiBun",
   // OS
   linux: "FaLinux",
 
@@ -202,8 +204,8 @@ export function TechTagList({
   const remaining = max ? items.length - max : 0;
   return (
     <div className="flex flex-wrap gap-1.5">
-      {visible.map((item) => (
-        <TechTag key={item} name={item} />
+      {visible.map((item, i) => (
+        <TechTag key={`${item}-${i}`} name={item} />
       ))}
       {remaining > 0 && (
         <span className="font-mono text-xs px-2 py-0.5 text-fg-subtle self-center">

@@ -86,9 +86,8 @@ export function Hero({ resumeUrl }: { resumeUrl?: string }) {
 
             {/* Display name - editorial, large */}
             <div className="mb-5">
-              <h1 className="font-serif italic leading-[0.88] tracking-tight text-fg">
-                <span className="block text-[clamp(3.5rem,10vw,6.5rem)]">Ichlasul</span>
-                <span className="block text-[clamp(3.5rem,10vw,6.5rem)]">Fikri.</span>
+              <h1 className="font-serif italic leading-[0.88] tracking-tight text-fg whitespace-nowrap">
+                <span className="text-[clamp(2rem,10.5vw,6.5rem)]">Ichlasul Fikri.</span>
               </h1>
               <p className="font-mono text-xs text-accent-alt mt-2 tracking-widest">
                 ↳ Boreneoux
