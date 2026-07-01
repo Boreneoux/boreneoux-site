@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { DeleteDialog } from "@/components/dashboard/DeleteDialog";
+import { IconPicker } from "@/components/dashboard/IconPicker";
 import type { SkillData } from "@/types";
 
 const CATEGORIES = ["frontend", "backend", "mobile", "tools"] as const;
@@ -233,13 +234,10 @@ export function SkillsClient({ initialData }: Props) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">
-                  Icon (React Icons key, e.g. SiTypescript)
-                </label>
-                <input
+                <label className="block text-xs font-mono text-fg-subtle mb-1 uppercase">Icon</label>
+                <IconPicker
                   value={form.icon}
-                  onChange={(e) => setForm((f) => ({ ...f, icon: e.target.value }))}
-                  className="w-full px-3 py-2 rounded-lg border border-border bg-bg text-sm font-mono text-fg focus:outline-none focus:border-accent"
+                  onChange={(key) => setForm((f) => ({ ...f, icon: key }))}
                 />
               </div>
               <div>

@@ -3,19 +3,7 @@
 import { motion } from "framer-motion";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import type { SkillData } from "@/types";
-import {
-  FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaNodeJs, FaGithub, FaLinux, FaDatabase,
-} from "react-icons/fa";
-import {
-  SiTypescript, SiTailwindcss, SiPostman, SiKotlin, SiNestjs, SiPrisma,
-  SiAndroid, SiDotnet, SiExpress, SiPostgresql, SiChakraui,
-} from "react-icons/si";
-
-const ICON_MAP: Record<string, React.ElementType> = {
-  FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaNodeJs, FaGithub, FaLinux, FaDatabase,
-  SiTypescript, SiTailwindcss, SiPostman, SiKotlin, SiNestjs, SiPrisma,
-  SiAndroid, SiDotnet, SiExpress, SiPostgresql, SiChakraui,
-};
+import { SKILL_ICON_MAP } from "@/lib/skillIcons";
 
 const CATEGORY_LABELS: Record<string, string> = {
   frontend: "Frontend",
@@ -67,7 +55,7 @@ export function Skills({ skills }: SkillsProps) {
               {/* Skill chips */}
               <div className="flex flex-wrap gap-2">
                 {grouped[cat].map((skill) => {
-                  const Icon = ICON_MAP[skill.icon];
+                  const Icon = SKILL_ICON_MAP[skill.icon];
                   return (
                     <div
                       key={skill.id}
