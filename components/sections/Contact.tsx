@@ -2,17 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { Copy, Check } from "lucide-react";
 
 const EMAIL = "ichlasul.ap@gmail.com";
-
-const socials = [
-  { href: "https://www.linkedin.com/in/ichlasulfikri/", icon: FaLinkedin, label: "LinkedIn" },
-  { href: "https://github.com/boreneoux", icon: FaGithub, label: "GitHub" },
-  { href: "https://instagram.com/ichlasulfikri_", icon: FaInstagram, label: "Instagram" },
-  { href: "https://youtube.com/ichlaso", icon: FaYoutube, label: "YouTube" },
-];
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -70,23 +62,6 @@ export function Contact() {
             </button>
           </div>
 
-          {/* Divider + socials */}
-          <div className="border-t border-border-muted">
-            <div className="pt-6 flex items-center justify-center md:justify-start gap-5">
-              {socials.map((s) => (
-                <a
-                  key={s.href}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="text-fg-subtle hover:text-fg transition-colors"
-                >
-                  <s.icon size={20} />
-                </a>
-              ))}
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>
