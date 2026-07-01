@@ -1,87 +1,172 @@
 import type { ElementType } from "react";
 import { cn } from "@/lib/utils";
-import {
-  FaHtml5, FaCss3Alt, FaJs, FaReact, FaFigma, FaNodeJs,
-  FaGithub, FaLinux, FaDatabase,
-} from "react-icons/fa";
-import {
-  SiTypescript, SiTailwindcss, SiPostman, SiKotlin, SiNestjs,
-  SiPrisma, SiAndroid, SiDotnet, SiExpress, SiPostgresql, SiChakraui,
-  SiNextdotjs, SiMysql, SiPhp, SiTensorflow, SiStorybook,
-  SiJenkins, SiSqlite, SiDocker, SiCodeigniter, SiGit,
-} from "react-icons/si";
+import { SKILL_ICON_MAP } from "@/lib/skillIcons";
 
-// Keyed by lowercase tech name for case-insensitive lookup
-const ICON_MAP: Record<string, ElementType> = {
+// Maps common tech names (lowercase) to icon keys in SKILL_ICON_MAP
+const NAME_TO_KEY: Record<string, string> = {
   // Web fundamentals
-  html: FaHtml5,
-  html5: FaHtml5,
-  css: FaCss3Alt,
-  css3: FaCss3Alt,
-  javascript: FaJs,
-  js: FaJs,
+  html: "FaHtml5", html5: "FaHtml5",
+  css: "FaCss3Alt", css3: "FaCss3Alt",
+  javascript: "FaJs", js: "FaJs",
+  typescript: "SiTypescript", ts: "SiTypescript",
 
   // Frontend frameworks
-  react: FaReact,
-  reactjs: FaReact,
-  "next.js": SiNextdotjs,
-  nextjs: SiNextdotjs,
-  "tailwind css": SiTailwindcss,
-  tailwindcss: SiTailwindcss,
-  tailwind: SiTailwindcss,
-  "chakra ui": SiChakraui,
-  chakraui: SiChakraui,
-  chakra: SiChakraui,
-  storybook: SiStorybook,
-  "storybook js": SiStorybook,
+  react: "FaReact", reactjs: "FaReact", "react.js": "FaReact",
+  "next.js": "SiNextdotjs", nextjs: "SiNextdotjs", next: "SiNextdotjs",
+  vue: "SiVuedotjs", "vue.js": "SiVuedotjs", vuejs: "SiVuedotjs",
+  nuxt: "SiNuxt", "nuxt.js": "SiNuxt", nuxtjs: "SiNuxt",
+  angular: "SiAngular",
+  svelte: "SiSvelte",
+  astro: "SiAstro",
+  gatsby: "SiGatsby",
+  solid: "SiSolid", solidjs: "SiSolid", "solid.js": "SiSolid",
+  remix: "SiRemix",
 
-  // Backend
-  "node.js": FaNodeJs,
-  nodejs: FaNodeJs,
-  "express.js": SiExpress,
-  express: SiExpress,
-  nestjs: SiNestjs,
-  prisma: SiPrisma,
-  jwt: FaDatabase,
+  // Frontend libs & styling
+  tailwind: "SiTailwindcss", tailwindcss: "SiTailwindcss", "tailwind css": "SiTailwindcss",
+  sass: "SiSass", scss: "SiSass",
+  "styled-components": "SiStyledcomponents", "styled components": "SiStyledcomponents",
+  chakra: "SiChakraui", "chakra ui": "SiChakraui", chakraui: "SiChakraui",
+  redux: "SiRedux",
+  "react query": "SiReactquery", "tanstack query": "SiReactquery", "react-query": "SiReactquery",
+  storybook: "SiStorybook",
+  "three.js": "SiThreedotjs", threejs: "SiThreedotjs",
+  "d3.js": "SiD3", d3: "SiD3",
+  "chart.js": "SiChartdotjs", chartjs: "SiChartdotjs",
 
-  // Databases
-  postgresql: SiPostgresql,
-  postgres: SiPostgresql,
-  mysql: SiMysql,
-  sqlite: SiSqlite,
-  sqlserver: FaDatabase,
-  "sql server": FaDatabase,
+  // Backend frameworks
+  "node.js": "FaNodeJs", nodejs: "FaNodeJs", node: "FaNodeJs",
+  express: "SiExpress", "express.js": "SiExpress",
+  nestjs: "SiNestjs", "nest.js": "SiNestjs",
+  fastapi: "SiFastapi",
+  django: "SiDjango",
+  flask: "SiFlask",
+  laravel: "SiLaravel",
+  spring: "SiSpring", "spring boot": "SiSpring",
+  ".net": "SiDotnet", "asp.net": "SiDotnet", dotnet: "SiDotnet",
+  prisma: "SiPrisma",
 
   // Languages
-  typescript: SiTypescript,
-  kotlin: SiKotlin,
-  php: SiPhp,
-  "c#": SiDotnet,
-  ".net": SiDotnet,
+  python: "FaPython",
+  java: "FaJava",
+  kotlin: "SiKotlin",
+  go: "SiGo", golang: "SiGo",
+  rust: "SiRust",
+  "c++": "SiCplusplus", cpp: "SiCplusplus",
+  php: "SiPhp",
+  swift: "FaSwift",
+  dart: "SiDart",
+  solidity: "SiSolidity",
 
-  // Mobile
-  android: SiAndroid,
-  "android sdk": SiAndroid,
-  "jetpack compose": SiAndroid,
+  // Databases
+  postgresql: "SiPostgresql", postgres: "SiPostgresql",
+  mysql: "SiMysql",
+  mongodb: "SiMongodb", mongo: "SiMongodb",
+  sqlite: "SiSqlite",
+  redis: "SiRedis",
+  firebase: "SiFirebase",
+  supabase: "SiSupabase",
+  elasticsearch: "SiElastic", elastic: "SiElastic",
+
+  // Mobile & cross-platform
+  android: "SiAndroid", "android sdk": "SiAndroid", "jetpack compose": "SiAndroid",
+  flutter: "SiFlutter",
+  ionic: "SiIonic",
+  expo: "SiExpo",
+  capacitor: "SiCapacitor",
+  electron: "SiElectron",
+
+  // Cloud & DevOps
+  docker: "SiDocker",
+  kubernetes: "SiKubernetes", k8s: "SiKubernetes",
+  terraform: "SiTerraform",
+  jenkins: "SiJenkins",
+  aws: "FaAws", "amazon web services": "FaAws",
+  gcp: "SiGooglecloud", "google cloud": "SiGooglecloud",
+  digitalocean: "SiDigitalocean",
+  cloudflare: "SiCloudflare",
+  netlify: "SiNetlify",
+  vercel: "SiVercel",
+  nginx: "SiNginx",
+
+  // Version control
+  git: "SiGit",
+  github: "FaGithub",
+  gitlab: "SiGitlab",
+  bitbucket: "SiBitbucket",
+
+  // Build tools & package managers
+  npm: "SiNpm",
+  yarn: "SiYarn",
+  pnpm: "SiPnpm",
+  webpack: "SiWebpack",
+  vite: "SiVite",
+  gradle: "SiGradle",
+  eslint: "SiEslint",
+  prettier: "SiPrettier",
+  postman: "SiPostman",
+
+  // Testing
+  jest: "SiJest",
+  cypress: "SiCypress",
 
   // AI / ML
-  tensorflow: SiTensorflow,
-  "tensorflow.js": SiTensorflow,
+  tensorflow: "SiTensorflow", "tensorflow.js": "SiTensorflow",
+  pytorch: "SiPytorch",
+  "hugging face": "SiHuggingface", huggingface: "SiHuggingface",
+  jupyter: "SiJupyter",
 
-  // DevOps / Tools
-  git: SiGit,
-  github: FaGithub,
-  linux: FaLinux,
-  docker: SiDocker,
-  jenkins: SiJenkins,
-  postman: SiPostman,
-  figma: FaFigma,
-  codeigniter: SiCodeigniter,
-  codeigniter4: SiCodeigniter,
+  // APIs & messaging
+  graphql: "SiGraphql",
+  apollo: "SiApollographql", "apollo graphql": "SiApollographql",
+  rabbitmq: "SiRabbitmq",
+  kafka: "SiApachekafka", "apache kafka": "SiApachekafka",
+
+  // Payments
+  stripe: "SiStripe",
+
+  // Project management
+  jira: "SiJira",
+  confluence: "SiConfluence",
+  slack: "FaSlack",
+  notion: "SiNotion",
+  trello: "SiTrello",
+  linear: "SiLinear",
+
+  // CMS & e-commerce
+  wordpress: "SiWordpress",
+  strapi: "SiStrapi",
+  contentful: "SiContentful",
+  shopify: "SiShopify",
+
+  // IDEs
+  vscode: "SiIntellijidea", "vs code": "SiIntellijidea",
+  intellij: "SiIntellijidea",
+  "android studio": "SiAndroidstudio",
+  vim: "SiVim",
+  xcode: "SiXcode",
+
+  // Design
+  figma: "SiFigma",
+  framer: "SiFramer",
+  sketch: "SiSketch",
+
+  // Game & 3D
+  unity: "SiUnity",
+
+  // Web3
+  ethereum: "SiEthereum",
+
+  // OS
+  linux: "FaLinux",
+
+  // Misc
+  codeigniter: "SiCodeigniter", "codeigniter 4": "SiCodeigniter",
 };
 
 function getTechIcon(name: string): ElementType | undefined {
-  return ICON_MAP[name.toLowerCase()];
+  const key = NAME_TO_KEY[name.toLowerCase()];
+  return key ? SKILL_ICON_MAP[key] : undefined;
 }
 
 interface TechTagProps {
