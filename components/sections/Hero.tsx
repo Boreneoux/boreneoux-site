@@ -151,7 +151,7 @@ export function Hero() {
 
           {/* Photo — portrait with decorative frame */}
           <motion.div
-            className="flex-shrink-0 self-start md:self-end"
+            className="flex-shrink-0 self-center md:self-end"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}

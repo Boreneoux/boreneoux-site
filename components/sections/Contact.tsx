@@ -31,6 +31,7 @@ export function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center md:text-left"
         >
           {/* Label */}
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-fg-subtle mb-6">
@@ -43,7 +44,7 @@ export function Contact() {
           </h2>
 
           {/* Email row */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-10">
+          <div className="flex flex-col items-center md:flex-row md:items-center gap-3 mb-10">
             <a
               href={`mailto:${EMAIL}`}
               className="font-mono text-base md:text-lg text-fg-muted hover:text-fg transition-colors underline underline-offset-4 decoration-border hover:decoration-accent"
@@ -52,7 +53,7 @@ export function Contact() {
             </a>
             <button
               onClick={copyEmail}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-bg-surface border border-border-muted text-xs text-fg-muted hover:text-fg hover:border-border transition-colors font-mono self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-bg-surface border border-border-muted text-xs text-fg-muted hover:text-fg hover:border-border transition-colors font-mono"
               aria-label="Copy email"
             >
               {copied ? (
@@ -70,8 +71,8 @@ export function Contact() {
           </div>
 
           {/* Divider + socials */}
-          <div className="flex items-center gap-6 pt-2 border-t border-border-muted">
-            <div className="pt-6 flex items-center gap-5">
+          <div className="border-t border-border-muted">
+            <div className="pt-6 flex items-center justify-center md:justify-start gap-5">
               {socials.map((s) => (
                 <a
                   key={s.href}
