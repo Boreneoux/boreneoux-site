@@ -84,10 +84,17 @@ export default async function ProjectDetailPage({
           </div>
 
           {/* Links — shown right after the visual, before reading */}
-          <ProjectLinks links={links} variant="header" />
+          {links.length > 0 && (
+            <div className="mb-2">
+              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-fg-subtle mb-3">
+                explore this project
+              </p>
+              <ProjectLinks links={links} variant="header" />
+            </div>
+          )}
 
           {/* Narrative */}
-          <article className={links.length > 0 ? "mt-10" : ""}>
+          <article className={links.length > 0 ? "mt-8" : ""}>
             {p.shortDescription && (
               <p className="text-lg md:text-xl text-fg leading-relaxed font-medium mb-8 border-l-2 border-accent pl-5">
                 {p.shortDescription}
@@ -100,9 +107,6 @@ export default async function ProjectDetailPage({
               {p.result && <p>{p.result}</p>}
             </div>
           </article>
-
-          {/* Links again at end — after reading, motivated CTA */}
-          <ProjectLinks links={links} variant="footer" />
 
           {/* Back to work */}
           <div className="mt-14">
