@@ -93,6 +93,7 @@ export function PortfoliosClient({ initialData }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<PortfolioData | null>(null);
   const [form, setForm] = useState<Omit<PortfolioData, "id">>(EMPTY);
+  const [techStackRaw, setTechStackRaw] = useState("");
   const [saving, setSaving] = useState(false);
 
   const sensors = useSensors(
@@ -102,12 +103,14 @@ export function PortfoliosClient({ initialData }: Props) {
   function openAdd() {
     setEditing(null);
     setForm(EMPTY);
+    setTechStackRaw("");
     setModalOpen(true);
   }
 
   function openEdit(p: PortfolioData) {
     setEditing(p);
     setForm({ ...p });
+    setTechStackRaw(p.techStack.join(", "));
     setModalOpen(true);
   }
 
@@ -275,11 +278,12 @@ export function PortfoliosClient({ initialData }: Props) {
                 Tech Stack (comma separated)
               </label>
               <input
-                value={form.techStack.join(", ")}
-                onChange={(e) =>
+                value={techStackRaw}
+                onChange={(e) => setTechStackRaw(e.target.value)}
+                onBlur={() =>
                   setForm((f) => ({
                     ...f,
-                    techStack: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                    techStack: techStackRaw.split(",").map((s) => s.trim()).filter(Boolean),
                   }))
                 }
                 className="w-full px-3 py-2 rounded-lg border border-border bg-bg text-sm text-fg focus:outline-none focus:border-accent"
