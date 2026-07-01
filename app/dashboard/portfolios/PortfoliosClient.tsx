@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Plus, Pencil, Star } from "lucide-react";
 import { DeleteDialog } from "@/components/dashboard/DeleteDialog";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
-import type { PortfolioData, PortfolioLink } from "@/types";
+import type { PortfolioData, PortfolioLink, PortfolioLinkType } from "@/types";
 
 const EMPTY: Omit<PortfolioData, "id"> = {
   slug: "",
@@ -87,7 +87,7 @@ export function PortfoliosClient({ initialData }: Props) {
   function addLink() {
     setForm((f) => ({
       ...f,
-      links: [...f.links, { label: "", url: "", type: "live" }],
+      links: [...f.links, { label: "", url: "", type: "live" as PortfolioLinkType }],
     }));
   }
 
@@ -249,8 +249,13 @@ export function PortfoliosClient({ initialData }: Props) {
                     onChange={(e) => updateLink(i, "type", e.target.value)}
                     className="px-2 py-1.5 rounded border border-border bg-bg text-xs text-fg focus:outline-none focus:border-accent"
                   >
-                    <option value="live">live</option>
-                    <option value="github">github</option>
+                    <option value="live">🌐 live demo</option>
+                    <option value="github">⌥ github</option>
+                    <option value="appstore">🍎 app store</option>
+                    <option value="playstore">▶ play store</option>
+                    <option value="youtube">▷ youtube</option>
+                    <option value="figma">◈ figma</option>
+                    <option value="docs">☰ docs</option>
                   </select>
                   <button onClick={() => removeLink(i)} className="text-red-400 text-xs px-1">✕</button>
                 </div>

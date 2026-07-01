@@ -1,7 +1,16 @@
+export type PortfolioLinkType =
+  | "github"
+  | "live"
+  | "appstore"
+  | "playstore"
+  | "youtube"
+  | "figma"
+  | "docs";
+
 export interface PortfolioLink {
   label: string;
   url: string;
-  type: "live" | "github";
+  type: PortfolioLinkType;
 }
 
 export interface ExperienceData {
