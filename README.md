@@ -73,6 +73,8 @@ Icons are powered by [react-icons](https://react-icons.github.io/react-icons). T
 | `SiTailwindcss` | Tailwind CSS |
 | `SiSass` | Sass / SCSS |
 | `SiChakraui` | Chakra UI |
+| `SiDaisyui` | Daisy UI |
+| `SiShadcnui` | shadcn/ui |
 | `SiStyledcomponents` | Styled Components |
 | `SiRedux` | Redux |
 | `SiReactquery` | TanStack / React Query |
@@ -96,6 +98,7 @@ Icons are powered by [react-icons](https://react-icons.github.io/react-icons). T
 | `SiGo` | Go |
 | `SiRust` | Rust |
 | `SiCplusplus` | C++ |
+| `SiDotnet` | C# (no dedicated icon — uses .NET) |
 | `SiPhp` | PHP |
 | `FaSwift` | Swift |
 | `SiDart` | Dart |
@@ -181,9 +184,9 @@ Icons are powered by [react-icons](https://react-icons.github.io/react-icons). T
 Common aliases (more are supported, see `components/ui/TechTag.tsx`):
 
 `React` · `Next.js` · `Vue` · `Nuxt` · `Angular` · `Svelte` · `Astro` · `Gatsby` · `Solid` · `Remix`  
-`TypeScript` · `Tailwind` · `Sass` · `Chakra UI` · `Redux` · `React Query` · `Storybook`  
+`TypeScript` · `Tailwind` · `Sass` · `Chakra UI` · `DaisyUI` · `Shadcn` · `Redux` · `React Query` · `Storybook`  
 `Node.js` · `Express` · `NestJS` · `FastAPI` · `Django` · `Flask` · `Laravel` · `Spring` · `.NET` · `Prisma`  
-`Python` · `Java` · `Kotlin` · `Go` · `Rust` · `C++` · `PHP` · `Swift` · `Dart`  
+`Python` · `Java` · `Kotlin` · `Go` · `Rust` · `C++` · `C#` · `PHP` · `Swift` · `Dart`  
 `PostgreSQL` · `MySQL` · `MongoDB` · `SQLite` · `Redis` · `Firebase` · `Supabase` · `Elasticsearch`  
 `Android` · `Flutter` · `Ionic` · `Expo` · `Electron`  
 `Docker` · `Kubernetes` · `Terraform` · `Jenkins` · `AWS` · `Google Cloud` · `DigitalOcean` · `Vercel` · `Netlify`  
